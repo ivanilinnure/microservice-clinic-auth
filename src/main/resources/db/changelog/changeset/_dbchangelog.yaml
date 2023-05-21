@@ -1,0 +1,197 @@
+databaseChangeLog:
+- property:
+      name: uuid_type
+      value: UUID
+      dbms: postgresql
+
+- property:
+      name: uuid_function
+      value: public.uuid_generate_v4()
+      dbms: postgresql
+
+- changeSet:
+    id: 1642261489752-1
+    author: Ivan Ilin
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: roles_pkey
+            name: id
+            type: ${uuid_type}
+            defaultValueComputed: ${uuid_function}
+        - column:
+            name: created
+            type: TIMESTAMP WITHOUT TIME ZONE
+            defaultValueComputed: CURRENT_TIMESTAMP
+        - column:
+            name: status
+            type: VARCHAR(255)
+            defaultValue: ACTIVE
+        - column:
+            name: updated
+            type: TIMESTAMP WITHOUT TIME ZONE
+            defaultValueComputed: CURRENT_TIMESTAMP
+        - column:
+            name: name
+            type: VARCHAR(255)
+        tableName: roles
+- changeSet:
+    id: 1642261489752-2
+    author: Ivan Ilin
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: user_id
+            type: UUID
+        - column:
+            constraints:
+              nullable: false
+            name: role_id
+            type: UUID
+        tableName: user_role
+- changeSet:
+    id: 1642261489752-3
+    author: Ivan Ilin
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: users_pkey
+            name: id
+            type: ${uuid_type}
+            defaultValueComputed: ${uuid_function}
+        - column:
+            name: created
+            type: TIMESTAMP WITHOUT TIME ZONE
+            defaultValueComputed: CURRENT_TIMESTAMP
+        - column:
+            name: status
+            type: VARCHAR(255)
+            defaultValue: ACTIVE
+        - column:
+            name: updated
+            type: TIMESTAMP WITHOUT TIME ZONE
+            defaultValueComputed: CURRENT_TIMESTAMP
+        - column:
+            constraints:
+              nullable: false
+            name: email
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: first_name
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: last_name
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: password
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: username
+            type: VARCHAR(255)
+        tableName: users
+- changeSet:
+    id: 1642261489752-4
+    author: Ivan Ilin
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: role_id
+        baseTableName: user_role
+        constraintName: user_role_role_id_fkey
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: roles
+        validate: true
+- changeSet:
+    id: 1642261489752-5
+    author: Ivan Ilin
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: user_id
+        baseTableName: user_role
+        constraintName: user_role_user_id_fkey
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: users
+        validate: true
+- changeSet:
+    id: 1642261489752-6
+    author: Ivan Ilin
+    changes:
+    - addUniqueConstraint:
+        columnNames: email
+        constraintName: users_email_key
+        tableName: users
+- changeSet:
+    id: 1642261489752-7
+    author: Ivan Ilin
+    changes:
+    - addUniqueConstraint:
+        columnNames: username
+        constraintName: users_username_key
+        tableName: users
+
+- changeSet:
+      id: 1642261489752-8
+      author: Ivan Ilin
+      changes:
+          - insert:
+                tableName: roles
+                columns:
+                    - column:
+                          name: name
+                          value: ROLE_USER
+          - insert:
+                tableName: roles
+                columns:
+                    - column:
+                          name: name
+                          value: ROLE_ADMIN
+
+- changeSet:
+      id: 1642261489752-9
+      author: Ivan Ilin
+      changes:
+          - insert:
+                tableName: users
+                columns:
+                    - column:
+                          name: username
+                          value: ivani
+                    - column:
+                          name: email
+                          value: info@ivanilin.com
+                    - column:
+                          name: first_name
+                          value: Ivan
+                    - column:
+                          name: last_name
+                          value: Ilin
+                    - column:
+                          name: password
+                          value: $2a$12$fCFf4kz.uubXY8Dm7vEQ9OzYxS/6DAKE8/OgrneDnUgxHhKjekDpu
+

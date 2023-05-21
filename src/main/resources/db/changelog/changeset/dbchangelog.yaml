@@ -1,0 +1,257 @@
+databaseChangeLog:
+  - property:
+      name: uuid_type
+      value: UUID
+      dbms: postgresql
+
+  - property:
+      name: uuid_function
+      value: public.uuid_generate_v4()
+      dbms: postgresql
+
+  - changeSet:
+      id: 1643084153886-1
+      author: ivan (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: roles_pkey
+                  name: id
+                  type: ${uuid_type}
+                  defaultValueComputed: ${uuid_function}
+              - column:
+                  name: created
+                  type: TIMESTAMP WITHOUT TIME ZONE
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: status
+                  type: VARCHAR(255)
+                  defaultValue: ACTIVE
+              - column:
+                  name: updated
+                  type: TIMESTAMP WITHOUT TIME ZONE
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+            tableName: roles
+  - changeSet:
+      id: 1643084153886-2
+      author: ivan (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: user_id
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: role_id
+                  type: UUID
+            tableName: user_role
+  - changeSet:
+      id: 1643084153886-3
+      author: ivan (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: users_pkey
+                  name: id
+                  type: ${uuid_type}
+                  defaultValueComputed: ${uuid_function}
+              - column:
+                  name: created
+                  type: TIMESTAMP WITHOUT TIME ZONE
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: status
+                  type: VARCHAR(255)
+                  defaultValue: ACTIVE
+              - column:
+                  name: updated
+                  type: TIMESTAMP WITHOUT TIME ZONE
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  constraints:
+                    nullable: false
+                  name: password
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: username
+                  type: VARCHAR(255)
+            tableName: users
+  - changeSet:
+      id: 1643084153886-4
+      author: ivan (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: role_id
+            baseTableName: user_role
+            constraintName: user_role_role_id_fkey
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: roles
+            validate: true
+  - changeSet:
+      id: 1643084153886-5
+      author: ivan (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: user_role
+            constraintName: user_role_user_id_fkey
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: users
+            validate: true
+  - changeSet:
+      id: 1643084153886-6
+      author: ivan (generated)
+      changes:
+        - addUniqueConstraint:
+            columnNames: username
+            constraintName: users_username_key
+            tableName: users
+  - changeSet:
+      id: 1643084153886-7
+      author: Ivan Ilin
+      changes:
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  value: 'eb55a2cc-06a6-4bd5-a8b9-8038d951646c'
+              - column:
+                  name: name
+                  value: 'ROLE_ADMIN'
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  value: '2168865f-ffd5-4ade-a5ce-f3929b2747c4'
+              - column:
+                  name: name
+                  value: 'ROLE_DOCTOR'
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  value: '75b66208-dfb0-43c0-97f5-d8ad65145725'
+              - column:
+                  name: name
+                  value: 'ROLE_PATIENT'
+  - changeSet:
+      id: 1643084153886-8
+      author: Ivan Ilin
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  value: '485c0984-ed16-479c-ba90-59dd440df889'
+              - column:
+                  name: username
+                  value: 'test1@test.com'
+              - column:
+                  name: password
+                  value: '$2a$10$LTm85pYy34CrT.ZZ0ueVquUpQ1Z7miVezGy9cdd5cG9qZfrnW.V4W'
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  value: 'bb02b577-efc0-4fa5-adaf-a237c60f7d51'
+              - column:
+                  name: username
+                  value: 'test2@test.com'
+              - column:
+                  name: password
+                  value: '$2a$10$2cUuzNxrUSMNev.pqpSII.Xh0mmqqHpjmuF3dy0vQdmyKWLcPr4sS'
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  value: 'e4d367cc-7c2c-49f8-b624-71002356883a'
+              - column:
+                  name: username
+                  value: 'test3@test.com'
+              - column:
+                  name: password
+                  value: '$2a$10$Se/KU8B7CuhX54AsQqCyFOgypgbLxFgqmlvTapVrvF9ZJmUn4yy/.'
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  value: '6f7128cc-17e8-4b7e-8a66-2b559645724f'
+              - column:
+                  name: username
+                  value: 'test4@test.com'
+              - column:
+                  name: password
+                  value: '$2a$10$pa9lxRbQF.QH.MkMxxjuZOyefuB3Uj2ZnLvvvaL.E4EAoZMlw2kSi'
+  - changeSet:
+      id: 1643084153886-9
+      author: Ivan Ilin
+      changes:
+        - insert:
+            tableName: user_role
+            columns:
+              - column:
+                  name: user_id
+                  value: '485c0984-ed16-479c-ba90-59dd440df889'
+              - column:
+                  name: role_id
+                  value: '2168865f-ffd5-4ade-a5ce-f3929b2747c4'
+        - insert:
+            tableName: user_role
+            columns:
+              - column:
+                  name: user_id
+                  value: 'bb02b577-efc0-4fa5-adaf-a237c60f7d51'
+              - column:
+                  name: role_id
+                  value: '2168865f-ffd5-4ade-a5ce-f3929b2747c4'
+        - insert:
+            tableName: user_role
+            columns:
+              - column:
+                  name: user_id
+                  value: 'e4d367cc-7c2c-49f8-b624-71002356883a'
+              - column:
+                  name: role_id
+                  value: '75b66208-dfb0-43c0-97f5-d8ad65145725'
+        - insert:
+            tableName: user_role
+            columns:
+              - column:
+                  name: user_id
+                  value: '6f7128cc-17e8-4b7e-8a66-2b559645724f'
+              - column:
+                  name: role_id
+                  value: '75b66208-dfb0-43c0-97f5-d8ad65145725'
+
